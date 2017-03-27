@@ -1,17 +1,17 @@
 
 # 1 "main.c"
 
-# 26 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\htc.h"
+# 26 "/Applications/microchip/xc8/v1.40/include/htc.h"
 extern const char __xc8_OPTIM_SPEED;
 
 extern double __fpnormalize(double);
 
 
-# 13 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\xc8debug.h"
+# 13 "/Applications/microchip/xc8/v1.40/include/xc8debug.h"
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\pic18f4620.h"
+# 49 "/Applications/microchip/xc8/v1.40/include/pic18f4620.h"
 extern volatile unsigned char PORTA @ 0xF80;
 
 asm("PORTA equ 0F80h");
@@ -3614,7 +3614,7 @@ extern volatile __bit nWR @ (((unsigned) &PORTE)*8) + 1;
 
 extern volatile __bit nWRITE @ (((unsigned) &SSPSTAT)*8) + 2;
 
-# 18 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\pic18.h"
+# 18 "/Applications/microchip/xc8/v1.40/include/pic18.h"
 __attribute__((__unsupported__("The " "flash_write" " routine is no longer supported. Please use the MPLAB X MCC."))) void flash_write(const unsigned char *, unsigned int, __far unsigned char *);
 __attribute__((__unsupported__("The " "EraseFlash" " routine is no longer supported. Please use the MPLAB X MCC."))) void EraseFlash(unsigned long startaddr, unsigned long endaddr);
 
@@ -3637,10 +3637,10 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 4 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\__size_t.h"
+# 4 "/Applications/microchip/xc8/v1.40/include/__size_t.h"
 typedef unsigned size_t;
 
-# 7 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\stdarg.h"
+# 7 "/Applications/microchip/xc8/v1.40/include/stdarg.h"
 typedef void * va_list[1];
 
 #pragma intrinsic(__va_start)
@@ -3649,17 +3649,17 @@ extern void * __va_start(void);
 #pragma intrinsic(__va_arg)
 extern void * __va_arg(void *, ...);
 
-# 43 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\stdio.h"
+# 43 "/Applications/microchip/xc8/v1.40/include/stdio.h"
 struct __prbuf
 {
 char * ptr;
 void (* func)(char);
 };
 
-# 29 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\errno.h"
+# 29 "/Applications/microchip/xc8/v1.40/include/errno.h"
 extern int errno;
 
-# 12 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\conio.h"
+# 12 "/Applications/microchip/xc8/v1.40/include/conio.h"
 extern void init_uart(void);
 
 extern char getch(void);
@@ -3673,7 +3673,7 @@ extern __bit kbhit(void);
 extern char * cgets(char *);
 extern void cputs(const char *);
 
-# 88 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\stdio.h"
+# 88 "/Applications/microchip/xc8/v1.40/include/stdio.h"
 extern int cprintf(char *, ...);
 #pragma printf_check(cprintf)
 
@@ -3756,7 +3756,7 @@ extern int printf(const char *, ...);
 
 #pragma config EBTRB = OFF
 
-# 14 "C:\Program Files (x86)\Microchip\xc8\v1.40\include\string.h"
+# 14 "/Applications/microchip/xc8/v1.40/include/string.h"
 extern void * memcpy(void *, const void *, size_t);
 extern void * memmove(void *, const void *, size_t);
 extern void * memset(void *, int, size_t);
@@ -3854,7 +3854,7 @@ int redirectAngle_9V = 118;
 int redirectAngle_OTHER = 153;
 
 int padAngle_CLOSE = 30;
-int padAngle_NEUTRAL = 60;
+int padAngle_NEUTRAL = 76;
 int padAngle_OPEN = 180;
 
 
@@ -3873,9 +3873,9 @@ int padPin3[2] = {0,0};
 
 
 
-float V_LIM_AA = .326;
-float V_LIM_C = 1.275;
-float V_LIM_9V = 1.96;
+float V_LIM_AA = .198;
+float V_LIM_C = 1.3254;
+float V_LIM_9V = 1.863;
 
 void main(){
 pinSetup();
@@ -3891,7 +3891,7 @@ startTimer(1,0);
 
 
 digitalWrite(cylinderMotor, 1);
-initServo(conveyorServo, 0);
+initServo(conveyorServo, 130);
 initServo(padServo, padAngle_NEUTRAL);
 initServo(redirectingServo, redirectAngle_AA);
 
@@ -3943,25 +3943,46 @@ digitalWrite(cylinderMotor, 0);
 
 _delay((unsigned long)((1000)*(10000000/4000.0)));
 
-
-
-setAngle(padServo, padAngle_CLOSE);
-_delay((unsigned long)((500)*(10000000/4000.0)));
-
-
-
-float Vcc = 4.61;
+float Vcc = 5.00;
 float resolution = (1<<10) - 1;
+float Vs = 0.0f;
+float V_max = 0.0f;
+int pos_v_counter = 1;
+unsigned char signal = 0;
 
-int targetAngle;
-int signal = digitalRead(padPin1)<<1;
-signal |= digitalRead(padPin2);
 
-digitalWrite(AA_float, 1);
+
+for(float i = (float)padAngle_NEUTRAL; i > padAngle_CLOSE; i -= 0.1) {
+setAngle(padServo, (int)i);
+_delay((unsigned long)((1)*(10000000/4000.0)));
 float V = analogRead(padPin3[1]) / resolution * Vcc;
 
+
+
+if(V > V_max) {
+signal = digitalRead(padPin1)<<1;
+signal |= digitalRead(padPin2);
+V_max = V;
+}
+
+}
+_delay((unsigned long)((20)*(10000000/4000.0)));
+
+# 192
+int targetAngle;
+
+digitalWrite(AA_float, 1);
+float Vf = (analogRead(padPin3[1]) / resolution * Vcc);
+float V = V_max;
+if(Vf > V) {
+V = Vf;
+signal = digitalRead(padPin1)<<1;
+signal |= digitalRead(padPin2);
+}
+
 lcdClear();
-printf("sig: %d \nV: %f",signal,V);
+printf("N: %d, V_f: %.3f \nV: %.3f",pos_v_counter,Vf, V);
+
 readKeypad();
 
 
@@ -3993,7 +4014,11 @@ _delay((unsigned long)((500)*(10000000/4000.0)));
 
 
 
-setAngle(padServo, padAngle_OPEN);
+for(int i = padAngle_CLOSE; i < padAngle_OPEN; i++) {
+setAngle(padServo, i);
+_delay((unsigned long)((3)*(10000000/4000.0)));
+}
+
 _delay((unsigned long)((1000)*(10000000/4000.0)));
 
 
@@ -4002,13 +4027,13 @@ setAngle(padServo, padAngle_NEUTRAL);
 
 
 
-setAngle(conveyorServo, 0);
+setAngle(conveyorServo, 130);
 digitalWrite(cylinderMotor, 1);
 }
 
 void pinSetup(){
 
-# 232
+# 260
 TRISA = 0xFF;
 TRISB = 0xFF;
 TRISC = 0b11000000;

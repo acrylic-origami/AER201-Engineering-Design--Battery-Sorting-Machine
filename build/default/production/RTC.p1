@@ -9,7 +9,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _I2C_Master_Stop `(i ~T0 @X0 0 ef ]
 "13 I2C.h
 [v _I2C_Master_Read `(uc ~T0 @X0 0 ef1`uc ]
-"6272 C:\Program Files (x86)\Microchip\xc8\v1.40\include\pic18f4620.h
+"6272 /Applications/microchip/xc8/v1.40/include/pic18f4620.h
 [s S258 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S258 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE_GIEL GIE_GIEH ]
 "6282
@@ -27,7 +27,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
 [; ;pic18f4620.h: 49: extern volatile unsigned char PORTA @ 0xF80;
-"51 C:\Program Files (x86)\Microchip\xc8\v1.40\include\pic18f4620.h
+"51 /Applications/microchip/xc8/v1.40/include/pic18f4620.h
 [; ;pic18f4620.h: 51: asm("PORTA equ 0F80h");
 [; <" PORTA equ 0F80h ;# ">
 [; ;pic18f4620.h: 54: typedef union {

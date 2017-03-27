@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=PIC18_LCD_LIB.X
+PROJECTNAME=AER201-Engineering-Design--Battery-Sorting-Machine
 
 # Active Configuration
 DEFAULTCONF=default
